@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body id="body">
+
+
+
+  <select name="Room Selection" id="roomSelection" onclick="changeRoom()">
+    <option value="Select a Room" selected>Select a Room</option>
+<option value="Main/">Main</option>
+<option value="Other/">Other</option>
+<option value="Other1/">Other1</option>
+</select>
+
+  <div id="input">
+    Name:
+    <input type="text"
+           id="usn"
+           value=""
+           onkeypress="checkKey(event)">
+	Message:
+	<input type="text"
+		   id="message"
+		   value=""
+		   onkeypress="checkKey(event)">
+    <button type="button"
+            onclick="chat()">
+      Send
+  </button>
+</div>
+    <p id="page"></p>
+
+	<script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-database.js"></script>
+  <script type='text/javascript' src='config.js'></script>
+
+    <script src="chat.js">
+    </script>
+
+</body>
+
+</html>
