@@ -22,6 +22,9 @@ var ref;
 //These variables serve to make sure no message is sent twice
 var oldUsn = " ";
 var oldMess = " ";
+usn = Math.floor(Math.random()*(999-100+1)+100);
+
+
 
 //function chat()
 //Runs whenever either the sent button or the Enter key is pressed
@@ -30,7 +33,7 @@ function chat() {
     //If the room is not the default
     if(room.localeCompare('Select a Room')!=0){
     firebase.database().ref(room).set({
-        usn: document.getElementById("usn").value + ": ",
+        usn: usn + ": ",
         message: document.getElementById("message").value
 
     });
@@ -47,6 +50,7 @@ function chat() {
 function changeRoom() {
     //newRoom is used to see if the room actually changed
     var newRoom = document.getElementById("roomSelection").value;
+
     console.log(newRoom);
     //If the newRoom is not the default
     if(newRoom.localeCompare('Select a Room')!=0){
@@ -63,8 +67,8 @@ function changeRoom() {
           ref = firebase.database().ref(room);
 
         }
-        //A function on ref that runs every time a value in the room is changed\
-        //In other words, this runs whenever the enter key is pressed.\,
+        //A function on ref that runs every time a value in the room is changed
+        //In other words, this runs whenever the enter key is pressed
         //after chat() is run
           ref.on('value', function (snapshot) {
             //run exactly once
