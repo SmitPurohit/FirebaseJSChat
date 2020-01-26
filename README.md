@@ -13,5 +13,5 @@ Using the chat is simple:
   
   3) Both Usn and message can be changed at anytime
   
-Future plans for this project are to add more rooms (either by me or an option for users to create rooms), adding anonymous chatting (perhaps by using the clients system time), make it look better with CSS, and accounts
+Future plans for this project are to add more rooms (either by me or an option for users to create rooms), adding anonymous string based usernames rather than anonymous number based usernames, make it look better with CSS, and accounts
 
