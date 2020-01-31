@@ -8,12 +8,20 @@
 
 
 
-<select name="Room Selection" id="roomSelection" onclick="changeRoom()">
+<select name="Room Selection" id="roomSelection" onclick="changeRoom('default')">
     <option value="Select a Room" selected>Select a Room</option>
 <option value="Main/">Main</option>
 <option value="Other/">Other</option>
 <option value="Other1/">Other1</option>
 </select>
+  Enter a room key:
+  <input type="text"
+        id="roomKey"
+        value="">
+  <button type="button"
+          onclick="changeRoom('')">
+          OK
+        </button>
 
   <div id="input">
     <!--Name:
