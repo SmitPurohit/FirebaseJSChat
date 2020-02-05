@@ -16,7 +16,8 @@ var database = firebase.database();
 
 //Sets the default room to a room selection
 var room = 'Select a Room';
-
+var key;
+var newRoom;
 //The variable that will store the reference to the specific table
 var ref;
 //These variables serve to make sure no message is sent twice
@@ -32,11 +33,14 @@ usn = Math.floor(Math.random()*(999-100+1)+100);
 function chat() {
     //If the room is not the default
     if(room.localeCompare('Select a Room')!=0){
-    firebase.database().ref(room).set({
-        usn: usn + ": ",
-        message: document.getElementById("message").value
+      firebase.database().ref(room).set({
+          usn: usn + ": ",
+          message: document.getElementById("message").value
 
-    });
+      });
+
+
+
     //Sets the message value to nothing so the message field is cleared
     document.getElementById("message").value = "";
   }
@@ -56,14 +60,15 @@ function changeRoom() {
     if(newRoom.localeCompare('Select a Room')!=0){
       //Show the input table (usn and message)
       document.getElementById('input').style.display='block';
+      document.getElementById("header").innerHTML = "<h1>" + room.substring(0, room.length - 1) + "</h1>";
       //Is the newRoom different than the current room
       if (newRoom.localeCompare(room) != 0) {
           room = newRoom;
 
 
           //Sets the title to the room
-          document.getElementById("page").innerHTML = "<h1>" + room.substring(0, room.length - 1) + "</h1>";
-
+          document.getElementById("header").innerHTML = "<h1>" + room.substring(0, room.length - 1) + "</h1>";
+          document.getElementById("page").innerHTML = "";
           ref = firebase.database().ref(room);
 
         }
@@ -72,15 +77,17 @@ function changeRoom() {
         //after chat() is run
           ref.on('value', function (snapshot) {
             //run exactly once
+            newUsn = snapshot.val().usn;
+            newMess = snapshot.val().message;
             for(var k = 0;k<1;k++){
               //Check if the current message is the same as the previous one
               //This is done to ensure a message isn't sent twice by accident
-              if(oldUsn.localeCompare(snapshot.val().usn) != 0 ||oldMess.localeCompare(snapshot.val().message) !=0){
+              if(oldUsn.localeCompare(newUsn) != 0 ||oldMess.localeCompare(newMess) !=0){
 
-                oldUsn =snapshot.val().usn;
-                oldMess = snapshot.val().message;
+                oldUsn = newUsn;
+                oldMess = newMess;
                 //Sets the HTML of the element "page" to the usn and the message
-                document.getElementById("page").innerHTML += snapshot.val().usn + snapshot.val().message + "<br>";
+                document.getElementById("page").innerHTML = newUsn + newMess + "<br>" + document.getElementById("page").innerHTML;
               }
 
 
@@ -94,6 +101,7 @@ function changeRoom() {
   }
   //if the room is default
   else{
+    document.getElementById("header").innerHTML = " ";
     //reset the page's HTML
     document.getElementById("page").innerHTML = " ";
     //Hides the inputs
