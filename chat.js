@@ -1,13 +1,13 @@
 // Your web app's Firebase configuration
 var config = {
-    apiKey: config.apiKey,
-    authDomain: config.authDomain,
-    databaseURL: config.databaseURL,
-    projectId: config.projectId,
-    storageBucket: config.storageBucket,
-    messagingSenderId: config.messagingSenderId,
-    appId: config.appId,
-    measurementId: config.measurementId
+  apiKey: config.apiKey,
+  authDomain: config.authDomain,
+  databaseURL: config.databaseURL,
+  projectId: config.projectId,
+  storageBucket: config.storageBucket,
+  messagingSenderId: config.messagingSenderId,
+  appId: config.appId,
+  measurementId: config.measurementId
 
 };
 // Initialize Firebase
@@ -16,6 +16,7 @@ var database = firebase.database();
 
 //Sets the default room to a room selection
 var room = 'Select a Room';
+//Sets variables for use later to determine new rooms and room key
 var key;
 var newRoom;
 //The variable that will store the reference to the specific table
@@ -23,26 +24,30 @@ var ref;
 //These variables serve to make sure no message is sent twice
 var oldUsn = " ";
 var oldMess = " ";
-usn = Math.floor(Math.random()*(999-100+1)+100);
+//Sets the username to a random 3 digit number
+usn = Math.floor(Math.random() * (999 - 100 + 1) + 100);
 
+var max = 10; //Max amount of messages that can be stored/read
 
 
 //function chat()
 //Runs whenever either the sent button or the Enter key is pressed
 //The chat function specifically sets the message and usn to be sent
 function chat() {
-    //If the room is not the default
-    if(room.localeCompare('Select a Room')!=0){
-      firebase.database().ref(room).set({
-          usn: usn + ": ",
-          message: document.getElementById("message").value
+  //If the room is not the default
+  if (room.localeCompare('Select a Room') != 0) {
+    firebase.database().ref(room).push({
+      usn: usn + ": ",
+      message: document.getElementById("message").value
 
-      });
-
+    });
+    //Check the counter to ensure no more than 10 messages can be stored
+    checkCounter(room);
 
 
     //Sets the message value to nothing so the message field is cleared
     document.getElementById("message").value = "";
+
   }
 
 
@@ -52,67 +57,130 @@ function chat() {
 //This function handles the heavy lifting of the actual chat
 //It is run when the room is changed
 function changeRoom() {
-    //newRoom is used to see if the room actually changed
-    var newRoom = document.getElementById("roomSelection").value;
-
-    console.log(newRoom);
-    //If the newRoom is not the default
-    if(newRoom.localeCompare('Select a Room')!=0){
-      //Show the input table (usn and message)
-      document.getElementById('input').style.display='block';
-      document.getElementById("header").innerHTML = "<h1>" + room.substring(0, room.length - 1) + "</h1>";
-      //Is the newRoom different than the current room
-      if (newRoom.localeCompare(room) != 0) {
-          room = newRoom;
+  //newRoom is used to see if the room actually changed
+  var newRoom = document.getElementById("roomSelection").value;
 
 
-          //Sets the title to the room
-          document.getElementById("header").innerHTML = "<h1>" + room.substring(0, room.length - 1) + "</h1>";
-          document.getElementById("page").innerHTML = "";
-          ref = firebase.database().ref(room);
+  //If the newRoom is not the default
+  if (newRoom.localeCompare('Select a Room') != 0) {
+    //Show the input table (usn and message)
+    document.getElementById('input').style.display = 'block';
+    document.getElementById("header").innerHTML = "<h1>" + room.substring(0,
+      room.length - 1) + "</h1>";
+    //Is the newRoom different than the current room
+    if (newRoom.localeCompare(room) != 0) {
+      room = newRoom;
+
+
+      //Sets the title to the room
+      document.getElementById("header").innerHTML = "<h1>" + room.substring(0,
+        room.length - 1) + "</h1>";
+      document.getElementById("page").innerHTML = "";
+      //Sets the reference to the elements to the database+room
+      ref = firebase.database().ref(room);
+
+    }
+    //A function on ref that runs every time a value in the room is changed
+    //In other words, this runs whenever the enter key is pressed
+    //after chat() is run
+    ref.on('value', function(snapshot) {
+      document.getElementById("page").innerHTML = ""; //resets the page
+
+      //Every time a value in the room changes
+      firebase.database().ref(room).once("value").then(function(snapshot) {
+
+        document.getElementById("page").innerHTML = ""; //resets the page again, so each message updates for each message
+        //Iterates through each message in the room
+        snapshot.forEach(function(childSnapshot) {
+          //Sets values of username and mess to the usn and message
+          var username = childSnapshot.val().usn;
+          var mess = childSnapshot.val().message;
+          //If the value is not null, add the new username and message to the top of the messages
+          if (childSnapshot.val().usn != null)
+            document.getElementById("page").innerHTML = username +
+            mess + "<br>" + document.getElementById("page").innerHTML;
+
+
+        });
+      });
+      //run exactly once
+      newUsn = snapshot.val().usn;
+      newMess = snapshot.val().message;
+      for (var k = 0; k < 1; k++) {
+        //Check if the current message is the same as the previous one
+        //This is done to ensure a message isn't sent twice by accident
+        if (oldUsn.localeCompare(newUsn) != 0 || oldMess.localeCompare(
+            newMess) != 0) {
+
+          oldUsn = newUsn;
+          oldMess = newMess;
+          //Sets the HTML of the element "page" to the usn and the message
 
         }
-        //A function on ref that runs every time a value in the room is changed
-        //In other words, this runs whenever the enter key is pressed
-        //after chat() is run
-          ref.on('value', function (snapshot) {
-            //run exactly once
-            newUsn = snapshot.val().usn;
-            newMess = snapshot.val().message;
-            for(var k = 0;k<1;k++){
-              //Check if the current message is the same as the previous one
-              //This is done to ensure a message isn't sent twice by accident
-              if(oldUsn.localeCompare(newUsn) != 0 ||oldMess.localeCompare(newMess) !=0){
-
-                oldUsn = newUsn;
-                oldMess = newMess;
-                //Sets the HTML of the element "page" to the usn and the message
-                document.getElementById("page").innerHTML = newUsn + newMess + "<br>" + document.getElementById("page").innerHTML;
-              }
 
 
-              }
+      }
 
-          });
-
+    });
 
 
 
   }
   //if the room is default
-  else{
+  else {
     document.getElementById("header").innerHTML = " ";
     //reset the page's HTML
     document.getElementById("page").innerHTML = " ";
     //Hides the inputs
-    document.getElementById('input').style.display='none';
+    document.getElementById('input').style.display = 'none';
   }
+}
+//function checkCounter(room)
+//This function handles making sure the amount of messages never gets higher than 10
+function checkCounter(thisRoom) {
+  //Sets the reference to the counter variable
+  ref = firebase.database().ref('/');
+  ref = ref.child(thisRoom + '/counter');
+  //A transaction that will increase/not do anything to counter
+  ref.transaction(function(counter) {
+    //If the counter is not the max, add one to the counter
+    if (counter != max)
+      return counter + 1;
+    //If the coutner is max, don't add anything
+    else {
+      //delete the latest message
+      deleteMessage(thisRoom);
+
+    }
+  });
+}
+//This function simply deletes the oldest message once the counter reaches 10
+function deleteMessage(refer) {
+  //The number of messages to be deleted
+  var times = 1;
+  console.log("poo")
+    //Only run when a value in the room changes
+  firebase.database().ref(refer).once("value").then(function(snapshot) {
+    //For the first message in the room
+    snapshot.forEach(function(childSnapshot) {
+      if (times > 0) {
+        //delete the message
+        firebase.database().ref(room + "/" + childSnapshot.key).set({
+          usn: null,
+          message: null
+
+        });
+      }
+
+      times--;
+    });
+  });
 }
 //function checkKey(event)
 //Runs when any key is pressed
 //If that key is the Enter key, run chat()
 function checkKey(e) {
-    if (e.keyCode == 13) {
-        chat();
-    }
+  if (e.keyCode == 13) {
+    chat();
+  }
 }
