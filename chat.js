@@ -95,11 +95,19 @@ function changeRoom() {
           //Sets values of username and mess to the usn and message
           var username = childSnapshot.val().usn;
           var mess = childSnapshot.val().message;
+          var myUSN = usn + ": ";
           //If the value is not null, add the new username and message to the top of the messages
           if (childSnapshot.val().usn != null)
-            document.getElementById("page").innerHTML = username +
-            mess + "<br>" + document.getElementById("page").innerHTML;
-
+          //If its your own message the style is changed (with the mypage id)
+            if (username == myUSN) {
+              document.getElementById("page").innerHTML =
+                "<span id=\"mypage\">" + username +
+                mess + "</span> <br>" + document.getElementById(
+                  "page").innerHTML;
+            } else { //other people messages
+              document.getElementById("page").innerHTML = username +
+                mess + "<br>" + document.getElementById("page").innerHTML;
+            }
 
         });
       });
