@@ -1,6 +1,25 @@
 #input {
   display:none;
 }
+
+/* Defualt message styling */
+#page{
+  font-size: 5vmin;
+  display: inline-block;
+  color: black;
+  border-color: #FF4136;
+
+}
+
+/* personal message styling */
+#mypage {
+  font-size: 5vmin;
+  display: inline-block;
+  color: blue;
+  border-color: #FF4136;
+
+}
+
 .title{
   font-size: 30px;
 }
