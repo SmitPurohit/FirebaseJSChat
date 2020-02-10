@@ -70,8 +70,6 @@ function changeRoom() {
     //Is the newRoom different than the current room
     if (newRoom.localeCompare(room) != 0) {
       room = newRoom;
-
-
       //Sets the title to the room
       document.getElementById("header").innerHTML = "<h1>" + room.substring(0,
         room.length - 1) + "</h1>";
@@ -95,6 +93,7 @@ function changeRoom() {
           //Sets values of username and mess to the usn and message
           var username = childSnapshot.val().usn;
           var mess = childSnapshot.val().message;
+          mess = mess.replace(/</g, "&lt;").replace(/>/g, "&gt;");
           var myUSN = usn + ": ";
           //If the value is not null, add the new username and message to the top of the messages
           if (childSnapshot.val().usn != null)
@@ -114,6 +113,7 @@ function changeRoom() {
       //run exactly once
       newUsn = snapshot.val().usn;
       newMess = snapshot.val().message;
+      newMess = newMess.replace(/</g, "&lt;").replace(/>/g, "&gt;");
       for (var k = 0; k < 1; k++) {
         //Check if the current message is the same as the previous one
         //This is done to ensure a message isn't sent twice by accident
