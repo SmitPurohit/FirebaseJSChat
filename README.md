@@ -3,7 +3,8 @@ A simple chat based on the Firebase Realtime Database by Google
 
 Access the chat by going to https://presidential-29357.web.app/
 
-The chat currently has 3 chat rooms, with a future plan of either more rooms created by me, or the option to create rooms by users
+The chat currently has 3 chat rooms, with the ability to add chat rooms, which is currently broken.
+Messages sent by the user are now in blue text, while other messages are in black text.
 
 Using the chat is simple:
 
@@ -13,5 +14,6 @@ Using the chat is simple:
   
   3) Both Usn and message can be changed at anytime
   
-Future plans for this project are to add more rooms (either by me or an option for users to create rooms), adding anonymous string based usernames rather than anonymous number based usernames, make it look better with CSS, and accounts
+  
+Future plans for this project are adding anonymous string based usernames rather than anonymous number based usernames, adding styling, and accounts.
 
