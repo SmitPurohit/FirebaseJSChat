@@ -1,7 +1,7 @@
 # FirebaseJSChat
 A simple chat based on the Firebase Realtime Database by Google
 
-Access the chat by going to https://presidential-29357.web.app/
+Access the chat by going to https://firejschat.web.app/
 
 The chat currently has 3 chat rooms, with the ability to add chat rooms, which is currently broken.
 Messages sent by the user are now in blue text, while other messages are in black text.
