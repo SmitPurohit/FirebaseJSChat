@@ -89,25 +89,31 @@ function changeRoom() {
 
         document.getElementById("page").innerHTML = ""; //resets the page again, so each message updates for each message
         //Iterates through each message in the room
+        var count = max;
         snapshot.forEach(function(childSnapshot) {
-          //Sets values of username and mess to the usn and message
-          var username = childSnapshot.val().usn;
-          var mess = childSnapshot.val().message;
-          mess = mess.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-          var myUSN = usn + ": ";
-          //If the value is not null, add the new username and message to the top of the messages
-          if (childSnapshot.val().usn != null)
-          //If its your own message the style is changed (with the mypage id)
-            if (username == myUSN) {
-              document.getElementById("page").innerHTML =
-                "<span id=\"mypage\">" + username +
-                mess + "</span> <br>" + document.getElementById(
-                  "page").innerHTML;
-            } else { //other people messages
-              document.getElementById("page").innerHTML = username +
-                mess + "<br>" + document.getElementById("page").innerHTML;
-            }
-
+          if (count > 0) {
+            //Sets values of username and mess to the usn and message
+            var username = childSnapshot.val().usn;
+            var mess = childSnapshot.val().message;
+            mess = mess.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            var myUSN = usn + ": ";
+            //If the value is not null, add the new username and message to the top of the messages
+            if (childSnapshot.val().usn != null)
+            //If its your own message the style is changed (with the mypage id)
+              if (username == myUSN) {
+                document.getElementById("page").innerHTML +=
+                  "<span id=\"mypage\">" + username +
+                  mess + "</span> <br>"
+                  /*+ document.getElementById(
+                                   "page").innerHTML*/
+                ;
+              } else { //other people messages
+                document.getElementById("page").innerHTML +=
+                  username +
+                  mess + "<br>" /*+ document.getElementById("page").innerHTML*/ ;
+              }
+            count--;
+          }
         });
       });
       //run exactly once

@@ -1,3 +1,7 @@
+h1 {
+  margin-bottom: 10px;
+}
+
 #input {
   display:none;
 }
@@ -8,7 +12,6 @@
   display: inline-block;
   color: black;
   border-color: #FF4136;
-
 }
 
 /* personal message styling */
@@ -17,7 +20,6 @@
   display: inline-block;
   color: blue;
   border-color: #FF4136;
-
 }
 
 .title{
