@@ -56,9 +56,14 @@ function chat() {
 //function changeRoom()
 //This function handles the heavy lifting of the actual chat
 //It is run when the room is changed
-function changeRoom() {
-  //newRoom is used to see if the room actually changed
-  var newRoom = document.getElementById("roomSelection").value;
+function changeRoom(roomValue) {
+  //If the input to the function is '', the newRoom is a specific roomKey
+  if (roomValue == '')
+    roomValue = document.getElementById("roomKey").value+"/";
+  //Otherwise, its one of the default rooms
+  else
+    roomValue = document.getElementById("roomSelection").value;
+var newRoom = roomValue;
 
 
   //If the newRoom is not the default
@@ -196,5 +201,12 @@ function deleteMessage(refer) {
 function checkKey(e) {
   if (e.keyCode == 13) {
     chat();
+  }
+}
+//function checkKey2(event)
+//Runs when the enter key is pressed in the room Key field
+function checkKey2(e){
+  if (e.keyCode == 13) {
+    changeRoom('');
   }
 }

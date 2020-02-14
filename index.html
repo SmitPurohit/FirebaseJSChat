@@ -17,9 +17,11 @@
   Enter a room key:
   <input type="text"
         id="roomKey"
-        value="">
+        value=""
+        onkeypress="checkKey2(event)">
   <button type="button"
-          onclick="changeRoom('')">
+          onclick="changeRoom('')"
+>
           OK
         </button>
 
