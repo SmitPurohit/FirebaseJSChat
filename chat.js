@@ -177,7 +177,6 @@ function checkCounter(thisRoom) {
 function deleteMessage(refer) {
   //The number of messages to be deleted
   var times = 1;
-  console.log("poo")
     //Only run when a value in the room changes
   firebase.database().ref(refer).once("value").then(function(snapshot) {
     //For the first message in the room
