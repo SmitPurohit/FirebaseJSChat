@@ -26,7 +26,6 @@ var oldUsn = " ";
 var oldMess = " ";
 //Sets the username to a random 3 digit number
 usn = Math.floor(Math.random() * (999 - 100 + 1) + 100);
-
 var max = 10; //Max amount of messages that can be stored/read
 
 
@@ -100,7 +99,12 @@ var newRoom = roomValue;
             //Sets values of username and mess to the usn and message
             var username = childSnapshot.val().usn;
             var mess = childSnapshot.val().message;
-            mess = mess.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            mess = mess.replace(/</g, "&lt;").replace(/>/g, "&gt;"); //Get rid of the html having any effect in a message
+            //if a message is a valid url, send it as a link
+            if(isValidURL(mess)){
+              mess = '<a href="https://' + mess +'"target="_blank">' + mess + "</a>";
+              console.log(mess);
+            }
             var myUSN = usn + ": ";
             //If the value is not null, add the new username and message to the top of the messages
             if (childSnapshot.val().usn != null)
@@ -194,6 +198,14 @@ function deleteMessage(refer) {
     });
   });
 }
+
+//function isValidURL(string)
+//Runs when the message is checked
+//Returns true if the message is a valid url
+function isValidURL(string) {
+  var res = string.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+  return (res !== null)
+};
 //function checkKey(event)
 //Runs when any key is pressed
 //If that key is the Enter key, run chat()
